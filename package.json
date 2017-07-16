@@ -11,6 +11,7 @@
     "standard": "^10.0.2"
   },
   "dependencies": {
+    "mongoose": "^4.11.3",
     "scrape-it": "^3.3.2"
   }
 }
