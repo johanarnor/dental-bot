@@ -1,0 +1,12 @@
+{
+  "name": "dental-bot",
+  "description": "Scrapes https://www.folktandvardenstockholm.se after last minute examinations",
+  "scripts": {
+    "test": "standard",
+    "deploy": "serverless deploy --verbose --stage prod"
+  },
+  "devDependencies": {
+    "serverless": "^1.17.0",
+    "standard": "^10.0.2"
+  }
+}
