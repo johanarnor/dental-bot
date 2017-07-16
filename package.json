@@ -3,10 +3,14 @@
   "description": "Scrapes https://www.folktandvardenstockholm.se after last minute examinations",
   "scripts": {
     "test": "standard",
+    "invoke": "serverless invoke local --function scrape",
     "deploy": "serverless deploy --verbose --stage prod"
   },
   "devDependencies": {
     "serverless": "^1.17.0",
     "standard": "^10.0.2"
+  },
+  "dependencies": {
+    "scrape-it": "^3.3.2"
   }
 }
