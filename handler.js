@@ -6,8 +6,8 @@ const {Appointment, Filter, Notification} = require('./models')
 // to avoid ssl errors (insecure I know...)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const hash = (data) => {
-  return require('crypto').createHash('md5').update(data).digest('hex')
+const getAppointmentId = (link) => {
+  return require('crypto').createHash('md5').update(link).digest('hex')
 }
 
 const persistAndNotify = (appointmentId, filterId) => {
@@ -41,7 +41,7 @@ module.exports.scrape = (event, context, callback) => {
   .then(({appointments}) => {
     return Promise.map(appointments, (appointment) => {
       return Appointment
-      .findByIdAndUpdate(hash(appointment.link), appointment, {new: true, upsert: true, setDefaultsOnInsert: true})
+      .findByIdAndUpdate(getAppointmentId(appointment.link), appointment, {new: true, upsert: true, setDefaultsOnInsert: true})
       .then((appointment) => Filter
         .find({clinics: appointment.clinic, treatments: appointment.treatment})
         .then((filters) => Promise.map(filters, (filter) => persistAndNotify(appointment._id, filter._id)))
