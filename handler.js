@@ -13,10 +13,10 @@ const getAppointmentId = (link) => {
 const persistAndNotify = (appointmentId, filterId) => {
   return Notification.findOne({appointment: appointmentId, filter: filterId})
   .then((notification) => notification
-    ? console.log(`${appointmentId} already notified for ${filterId}`)
+    ? console.log(`filter ${filterId} already notified for appointment ${appointmentId}`)
     : new Notification({appointment: appointmentId, filter: filterId})
       .save()
-      .then((notification) => console.log(`notifying ${notification}`))
+      .then((notification) => console.log(`notifying filter ${filterId} for appointment ${appointmentId}`))
   )
 }
 
