@@ -10,6 +10,16 @@ const hash = (data) => {
   return require('crypto').createHash('md5').update(data).digest('hex')
 }
 
+const persistAndNotify = (appointmentId, filterId) => {
+  return Notification.findOne({appointment: appointmentId, filter: filterId})
+  .then((notification) => notification
+    ? console.log(`${appointmentId} already notified for ${filterId}`)
+    : new Notification({appointment: appointmentId, filter: filterId})
+      .save()
+      .then((notification) => console.log(`notifying ${notification}`))
+  )
+}
+
 module.exports.scrape = (event, context, callback) => {
   mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
 
@@ -29,23 +39,15 @@ module.exports.scrape = (event, context, callback) => {
     }
   })
   .then(({appointments}) => {
-    return Promise.each(appointments, (appointment) => {
+    return Promise.map(appointments, (appointment) => {
       return Appointment
       .findByIdAndUpdate(hash(appointment.link), appointment, {new: true, upsert: true, setDefaultsOnInsert: true})
       .then((appointment) => Filter
         .find({clinics: appointment.clinic, treatments: appointment.treatment})
-        .then((filters) => Promise.each(filters, (filter) => new Notification({appointment: appointment._id, filter: filter._id}).save()))
+        .then((filters) => Promise.map(filters, (filter) => persistAndNotify(appointment._id, filter._id)))
       )
-      .then(console.log)
-    })
-    .then((result) => {
-      console.log('los result', result)
-      mongoose.connection.close()
-    })
-    .catch((error) => {
-      console.error(error)
-      mongoose.connection.close()
     })
   })
   .catch(console.error)
+  .then(() => mongoose.connection.close())
 }
