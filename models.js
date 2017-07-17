@@ -1,8 +1,12 @@
 const mongoose = require('mongoose')
 
-const TREATMENTS = ['Tandsten']
+const TREATMENTS = ['Undersökning', 'Borttagning av tandsten']
 
 const Appointment = mongoose.model('Appointment', {
+  _id: {
+    type: String,
+    required: true
+  },
   date: {
     type: String,
     required: true
@@ -23,23 +27,19 @@ const Appointment = mongoose.model('Appointment', {
   link: {
     type: String,
     required: true
-  },
-  hash: {
-    type: String,
-    required: true
   }
 })
 
-const User = mongoose.model('User', {
+const Filter = mongoose.model('Filter', {
   email: {
     type: String,
     required: true
   },
-  preferredClinics: {
+  clinics: {
     type: [String],
     required: true
   },
-  preferredTreatments: {
+  treatments: {
     type: [String],
     validate: (values) => values.every(value => TREATMENTS.includes(value))
   }
@@ -47,11 +47,11 @@ const User = mongoose.model('User', {
 
 const Notification = mongoose.model('Notification', {
   appointment: {type: String, ref: 'Appointment'},
-  user: {type: String, ref: 'User'}
+  user: {type: String, ref: 'Filter'}
 })
 
 module.exports = {
   Appointment,
-  User,
+  Filter,
   Notification
 }
