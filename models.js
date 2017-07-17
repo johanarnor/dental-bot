@@ -27,6 +27,10 @@ const Appointment = mongoose.model('Appointment', {
   link: {
     type: String,
     required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
   }
 })
 
@@ -46,8 +50,18 @@ const Filter = mongoose.model('Filter', {
 })
 
 const Notification = mongoose.model('Notification', {
-  appointment: {type: String, ref: 'Appointment'},
-  user: {type: String, ref: 'Filter'}
+  appointment: {
+    type: String,
+    ref: 'Appointment'
+  },
+  user: {
+    type: String,
+    ref: 'Filter'
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
 })
 
 module.exports = {

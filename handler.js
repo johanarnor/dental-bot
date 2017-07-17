@@ -29,7 +29,7 @@ module.exports.scrape = (event, context, callback) => {
     }
   })
   .then(({appointments}) => {
-    return Promise.each(appointments, (appointment) => Appointment.findByIdAndUpdate(hash(appointment.link), appointment, {upsert: true}))
+    return Promise.each(appointments, (appointment) => Appointment.findByIdAndUpdate(hash(appointment.link), appointment, {upsert: true, setDefaultsOnInsert: true}))
     .then((result) => {
       console.log('los result', result)
       mongoose.connection.close()
