@@ -6,8 +6,8 @@ const {Appointment} = require('./models')
 // to avoid ssl errors (insecure I know...)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
-const hash = ({date, time, clinic, treatment}) => {
-  return require('crypto').createHash('md5').update(date + time + clinic + treatment).digest('hex')
+const hash = (data) => {
+  return require('crypto').createHash('md5').update(data).digest('hex')
 }
 
 module.exports.scrape = (event, context, callback) => {
@@ -29,7 +29,7 @@ module.exports.scrape = (event, context, callback) => {
     }
   })
   .then(({appointments}) => {
-    return Promise.each(appointments, (appointment) => Appointment.findByIdAndUpdate(hash(appointment), appointment, {upsert: true}))
+    return Promise.each(appointments, (appointment) => Appointment.findByIdAndUpdate(hash(appointment.link), appointment, {upsert: true}))
     .then((result) => {
       console.log('los result', result)
       mongoose.connection.close()
