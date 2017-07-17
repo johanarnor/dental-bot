@@ -52,11 +52,13 @@ const Filter = mongoose.model('Filter', {
 const Notification = mongoose.model('Notification', {
   appointment: {
     type: String,
-    ref: 'Appointment'
+    ref: 'Appointment',
+    required: true
   },
-  user: {
-    type: String,
-    ref: 'Filter'
+  filter: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Filter',
+    required: true
   },
   createdAt: {
     type: Date,

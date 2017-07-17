@@ -1,7 +1,7 @@
 const scrapeIt = require('scrape-it')
 const mongoose = require('mongoose')
 const Promise = require('bluebird')
-const {Appointment} = require('./models')
+const {Appointment, Filter, Notification} = require('./models')
 
 // to avoid ssl errors (insecure I know...)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -29,7 +29,15 @@ module.exports.scrape = (event, context, callback) => {
     }
   })
   .then(({appointments}) => {
-    return Promise.each(appointments, (appointment) => Appointment.findByIdAndUpdate(hash(appointment.link), appointment, {upsert: true, setDefaultsOnInsert: true}))
+    return Promise.each(appointments, (appointment) => {
+      return Appointment
+      .findByIdAndUpdate(hash(appointment.link), appointment, {new: true, upsert: true, setDefaultsOnInsert: true})
+      .then((appointment) => Filter
+        .find({clinics: appointment.clinic, treatments: appointment.treatment})
+        .then((filters) => Promise.each(filters, (filter) => new Notification({appointment: appointment._id, filter: filter._id}).save()))
+      )
+      .then(console.log)
+    })
     .then((result) => {
       console.log('los result', result)
       mongoose.connection.close()
