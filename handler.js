@@ -48,6 +48,7 @@ module.exports.scrape = (event, context, callback) => {
     }
   })
   .then(({appointments}) => {
+    appointments.forEach(appointment => console.log('found appointment', appointment))
     return Promise.map(appointments, (appointment) => {
       return Appointment
       .findByIdAndUpdate(getAppointmentId(appointment.link), appointment, {new: true, upsert: true, setDefaultsOnInsert: true})
