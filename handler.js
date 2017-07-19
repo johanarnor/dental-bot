@@ -4,6 +4,9 @@ const Promise = require('bluebird')
 const {Appointment, Filter, Notification} = require('./models')
 const notify = require('./notify')
 
+// Don't use mongoose deprecated promises
+mongoose.Promise = global.Promise
+
 // to avoid ssl errors (insecure I know...)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
