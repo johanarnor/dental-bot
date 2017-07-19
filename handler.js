@@ -2,6 +2,7 @@ const scrapeIt = require('scrape-it')
 const mongoose = require('mongoose')
 const Promise = require('bluebird')
 const {Appointment, Filter, Notification} = require('./models')
+const notify = require('./notify')
 
 // to avoid ssl errors (insecure I know...)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -10,14 +11,22 @@ const getAppointmentId = (link) => {
   return require('crypto').createHash('md5').update(link).digest('hex')
 }
 
-const persistAndNotify = (appointmentId, filterId) => {
-  return Notification.findOne({appointment: appointmentId, filter: filterId})
-  .then((notification) => notification
-    ? console.log(`filter ${filterId} already notified for appointment ${appointmentId}`)
-    : new Notification({appointment: appointmentId, filter: filterId})
+const persistAndNotify = (appointment, filter) => {
+  return Notification.findOne({appointment: appointment._id, filter: filter._id})
+  .then((notification) => {
+    if (notification) {
+      console.log(`${filter._id} already notified for ${appointment._id}`)
+    } else {
+      console.log(`notifying filter ${filter._id} for appointment ${appointment._id}`)
+      return new Notification({appointment: appointment._id, filter: filter._id})
       .save()
-      .then((notification) => console.log(`notifying filter ${filterId} for appointment ${appointmentId}`))
-  )
+      .then(() => notify.email({
+        to: filter.email,
+        subject: `Ny tandläkartid hittad!`,
+        text: `${appointment.treatment} kl ${appointment.time} den ${appointment.date} i ${appointment.clinic}.\n${appointment.link}`
+      }))
+    }
+  })
 }
 
 module.exports.scrape = (event, context, callback) => {
@@ -44,7 +53,7 @@ module.exports.scrape = (event, context, callback) => {
       .findByIdAndUpdate(getAppointmentId(appointment.link), appointment, {new: true, upsert: true, setDefaultsOnInsert: true})
       .then((appointment) => Filter
         .find({clinics: appointment.clinic, treatments: appointment.treatment})
-        .then((filters) => Promise.map(filters, (filter) => persistAndNotify(appointment._id, filter._id)))
+        .then((filters) => Promise.map(filters, (filter) => persistAndNotify(appointment, filter)))
       )
     })
   })

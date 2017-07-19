@@ -13,6 +13,7 @@
   "dependencies": {
     "bluebird": "^3.5.0",
     "mongoose": "^4.11.3",
+    "nodemailer": "^4.0.1",
     "scrape-it": "^3.3.2"
   }
 }
