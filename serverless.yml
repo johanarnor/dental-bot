@@ -10,5 +10,5 @@ provider:
 functions:
   scrape:
     handler: handler.scrape
-     events:
+    events:
       - schedule: rate(5 minutes)
