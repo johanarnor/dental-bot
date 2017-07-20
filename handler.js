@@ -10,6 +10,17 @@ mongoose.Promise = global.Promise
 // to avoid ssl errors (insecure I know...)
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
+const connectToDatabase = () => {
+  console.log('database connection state', mongoose.connection.readyState)
+  if (mongoose.connection.readyState === 1) {
+    console.log('database connection already active')
+    return Promise.resolve()
+  } else {
+    console.log('initiating new database connection')
+    return mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
+  }
+}
+
 const getAppointmentId = (link) => {
   return require('crypto').createHash('md5').update(link).digest('hex')
 }
@@ -33,9 +44,11 @@ const persistAndNotify = (appointment, filter) => {
 }
 
 module.exports.scrape = (event, context, callback) => {
-  mongoose.connect(process.env.MONGODB_URI, {useMongoClient: true})
+  // allows us to reuse the mongo connection, making execution significantly faster
+  context.callbackWaitsForEmptyEventLoop = false
 
-  scrapeIt('https://www.folktandvardenstockholm.se/webbokning/tillgangliga-tider/?lastmin=true', {
+  connectToDatabase()
+  .then(() => scrapeIt('https://www.folktandvardenstockholm.se/webbokning/tillgangliga-tider/?lastmin=true', {
     appointments: {
       listItem: '.booking-main tbody tr',
       data: {
@@ -49,7 +62,7 @@ module.exports.scrape = (event, context, callback) => {
         }
       }
     }
-  })
+  }))
   .then(({appointments}) => {
     appointments.forEach(appointment => console.log('found appointment', JSON.stringify(appointment)))
     return Promise.map(appointments, (appointment) => {
@@ -61,6 +74,6 @@ module.exports.scrape = (event, context, callback) => {
       )
     })
   })
-  .catch(console.error)
-  .then(() => mongoose.connection.close())
+  .then(() => callback(null))
+  .catch((error) => callback(error))
 }
