@@ -11,7 +11,6 @@
   },
   "dependencies": {
     "@prisma/client": "^3.11.1",
-    "mongoose": "^4.11.3",
     "nodemailer": "^6.7.3",
     "scrape-it": "^3.3.2"
   }
