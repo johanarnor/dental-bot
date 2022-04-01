@@ -10,5 +10,6 @@ Logs are sent to Logtail and I've also added [charts in MongoDB](https://charts.
 Some useful commands
 - `npm start` run the bot
 - `npx prisma generate` generate the prisma client from the schema
+- `npx prisma studio` launches a dashboard over the data and supports filtering/creating objects etc
 - `npx prisma format` formats the schema
 - `heroku logs --tail --app dental-bot-johanarnor` see the logs Heroku logs (available in Logtail as well)
