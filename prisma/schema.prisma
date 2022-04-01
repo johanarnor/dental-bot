@@ -12,9 +12,16 @@ datasource db {
 }
 
 model Appointment {
-  id          String    @id @map("_id")
-  createdAt   DateTime  @default(now())
+  id          String   @id @map("_id")
+  createdAt   DateTime @default(now())
   description String
   clinic      String
   startTime   DateTime
+}
+
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  active  Boolean
+  email   String
+  clinics String[]
 }
