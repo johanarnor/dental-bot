@@ -1,19 +1,17 @@
 {
   "name": "dental-bot",
+  "type": "module",
   "description": "Scrapes https://www.folktandvardenstockholm.se after last minute examinations",
   "scripts": {
     "test": "standard",
-    "invoke-local": "serverless invoke local --function scrape",
-    "deploy": "serverless deploy --verbose --stage prod"
+    "start": "node --experimental-fetch bot.js"
   },
   "devDependencies": {
-    "serverless": "^1.17.0",
-    "standard": "^10.0.2"
+    "prisma": "^3.11.1",
+    "standard": "^16.0.4"
   },
   "dependencies": {
-    "bluebird": "^3.5.0",
-    "mongoose": "^4.11.3",
-    "nodemailer": "^4.0.1",
-    "scrape-it": "^3.3.2"
+    "@prisma/client": "^3.11.1",
+    "nodemailer": "^6.7.3"
   }
 }

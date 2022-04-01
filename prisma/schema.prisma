@@ -1,0 +1,27 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Appointment {
+  id          String   @id @map("_id")
+  createdAt   DateTime @default(now())
+  description String
+  clinic      String
+  startTime   DateTime
+}
+
+model User {
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
+  active  Boolean
+  email   String
+  clinics String[]
+}
