@@ -6,7 +6,7 @@
     "test": "standard"
   },
   "devDependencies": {
-    "standard": "^10.0.2"
+    "standard": "^16.0.4"
   },
   "dependencies": {
     "bluebird": "^3.5.0",
