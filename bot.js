@@ -1,12 +1,12 @@
 /* global fetch */
 import Prisma from '@prisma/client'
-import exampleData from './exampleData.js'
 import { sendEmail } from './email.js'
 
 process.env.TZ = 'Europe/Stockholm' // tell node to parse dates without timestamp (e.g. startTime) with Stockholm timezone
 
 const prisma = new Prisma.PrismaClient()
 
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 const alreadyExists = ({ id }) => prisma.appointment.findUnique({ where: { id } })
   .then(Boolean)
 
@@ -31,12 +31,10 @@ const notifyUsers = async (appointment) => {
 }
 
 const main = async () => {
-  // console.time('fetch')
-  // const result = await fetch('https://www.folktandvardenstockholm.se/api/booking/lastminutenotcached')
-  // console.time('fetch')
-  // const appointments = await result.json()
-  const appointments = exampleData
-  // console.log(await result.json())
+  console.time('fetchAppointments')
+  const result = await fetch('https://www.folktandvardenstockholm.se/api/booking/lastminutenotcached')
+  console.timeEnd('fetchAppointments')
+  const appointments = await result.json()
   for (const appointment of appointments) {
     if (await alreadyExists(appointment)) {
       console.log(`already seen ${appointment.id} skipping`)
@@ -62,6 +60,8 @@ const main = async () => {
     console.log('saved appointment', JSON.stringify(savedAppointment))
     await notifyUsers(savedAppointment)
   }
+  await sleep(60 * 1000)
+  main()
 }
 
 main().catch(console.error)
