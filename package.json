@@ -6,6 +6,7 @@
     "test": "standard"
   },
   "devDependencies": {
+    "prisma": "^3.11.1",
     "standard": "^16.0.4"
   },
   "dependencies": {
