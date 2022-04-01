@@ -1,5 +1,6 @@
 {
   "name": "dental-bot",
+  "type": "module",
   "description": "Scrapes https://www.folktandvardenstockholm.se after last minute examinations",
   "scripts": {
     "test": "standard"
