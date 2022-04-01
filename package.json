@@ -3,7 +3,8 @@
   "type": "module",
   "description": "Scrapes https://www.folktandvardenstockholm.se after last minute examinations",
   "scripts": {
-    "test": "standard"
+    "test": "standard",
+    "start": "node --experimental-fetch bot.js"
   },
   "devDependencies": {
     "prisma": "^3.11.1",
