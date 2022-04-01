@@ -10,6 +10,7 @@
     "standard": "^16.0.4"
   },
   "dependencies": {
+    "@prisma/client": "^3.11.1",
     "bluebird": "^3.5.0",
     "mongoose": "^4.11.3",
     "nodemailer": "^4.0.1",
