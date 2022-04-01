@@ -12,6 +12,9 @@ datasource db {
 }
 
 model Appointment {
-  id          String @id @map("_id")
+  id          String    @id @map("_id")
+  createdAt   DateTime  @default(now())
   description String
+  clinic      String
+  startTime   DateTime
 }

@@ -2,6 +2,8 @@
 import Prisma from '@prisma/client'
 import exampleData from './exampleData.js'
 
+process.env.TZ = 'Europe/Stockholm' // tell node to parse dates without timestamp (e.g. startTime) with Stockholm timezone
+
 const prisma = new Prisma.PrismaClient()
 
 const alreadyExists = ({ id }) => prisma.appointment.findUnique({ where: { id } })
@@ -15,11 +17,25 @@ const main = async () => {
   const appointments = exampleData
   // console.log(await result.json())
   for (const appointment of appointments) {
-    if (await alreadyExists(appointment)) continue
+    if (await alreadyExists(appointment)) {
+      console.log(`already seen ${appointment.id} skipping`)
+      continue
+    }
+
+    const {
+      id,
+      timeType: {
+        description
+      },
+      clinicName: clinic,
+      startTime
+    } = appointment
     const saveResult = await prisma.appointment.create({
       data: {
-        id: appointment.id,
-        description: appointment.timeType.description
+        id,
+        description,
+        clinic,
+        startTime: new Date(startTime)
       }
     })
     console.log(saveResult)
