@@ -12,9 +12,12 @@ const transporter = nodemailer.createTransport({
   }
 })
 
-export const sendEmail = ({ to, subject, text }) => transporter.sendMail({
-  from: `"Dentist Bot" <${EMAIL}>`,
-  to,
-  subject,
-  text
-})
+export const sendEmail = async ({ to, subject, text }) => {
+  await transporter.sendMail({
+    from: `"Dentist Bot" <${EMAIL}>`,
+    to,
+    subject,
+    text
+  })
+  console.log('emailed', to, subject)
+}
