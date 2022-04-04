@@ -65,10 +65,10 @@ const bot = async () => {
 const server = async () => {
   try {
     await bot()
-    await sleep(60 * 1000)
   } catch (error) {
     console.error('bot error', error)
   }
+  await sleep(60 * 1000)
   server()
 }
 
