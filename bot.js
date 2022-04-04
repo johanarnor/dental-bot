@@ -30,7 +30,7 @@ const notifyUsers = async (appointment) => {
   }
 }
 
-const main = async () => {
+const bot = async () => {
   console.time('fetchAppointments')
   const result = await fetch('https://www.folktandvardenstockholm.se/api/booking/lastminutenotcached')
   console.timeEnd('fetchAppointments')
@@ -60,8 +60,16 @@ const main = async () => {
     console.log('saved appointment', JSON.stringify(savedAppointment))
     await notifyUsers(savedAppointment)
   }
-  await sleep(60 * 1000)
-  main()
 }
 
-main().catch(console.error)
+const server = async () => {
+  try {
+    bot()
+    await sleep(60 * 1000)
+  } catch (error) {
+    console.error('bot error', error)
+  }
+  server()
+}
+
+server()
