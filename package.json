@@ -6,9 +6,6 @@
     "test": "standard",
     "start": "node bot.js"
   },
-  "engines": {
-    "node": "17.x"
-  },
   "devDependencies": {
     "prisma": "^3.11.1",
     "standard": "^16.0.4"
