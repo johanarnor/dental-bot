@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@prisma/client": "^3.11.1",
-    "node-fetch": "^3.2.3",
     "nodemailer": "^6.7.3"
   }
 }

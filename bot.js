@@ -1,4 +1,4 @@
-import fetch from 'node-fetch'
+/* global fetch */
 import Prisma from '@prisma/client'
 import { sendEmail } from './email.js'
 
