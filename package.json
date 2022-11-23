@@ -1,7 +1,7 @@
 {
   "name": "dental-bot",
   "type": "module",
-  "description": "Scrapes https://www.folktandvardenstockholm.se after last minute examinations",
+  "description": "Scrapes https://www.folktandvardenstockholm.se for last minute examinations",
   "scripts": {
     "test": "standard",
     "start": "node bot.js"
