@@ -8,7 +8,7 @@
   },
   "devDependencies": {
     "prisma": "^3.11.1",
-    "standard": "^16.0.4"
+    "standard": "^17.0.0"
   },
   "dependencies": {
     "@prisma/client": "^3.11.1",
