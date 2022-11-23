@@ -7,11 +7,11 @@
     "start": "node bot.js"
   },
   "devDependencies": {
-    "prisma": "^3.11.1",
+    "prisma": "^4.6.1",
     "standard": "^17.0.0"
   },
   "dependencies": {
-    "@prisma/client": "^3.11.1",
+    "@prisma/client": "^4.6.1",
     "nodemailer": "^6.7.3"
   }
 }
